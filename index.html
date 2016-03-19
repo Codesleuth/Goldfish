@@ -8,98 +8,25 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 
   <title>Goldfish!</title>
-  <link rel="stylesheet" type="text/css" href="libs/semantic/semantic.min.css">
+  <link rel="stylesheet" type="text/css" href="libs/semantic/dist/semantic.css">
 
-  <script src="libs/jquery/jquery.min.js"></script>
-  <script src="libs/semantic/semantic.min.js"></script>
-  <script src="libs/angularjs/angular.min.js"></script>
-  <!--<script src="libs/angular-ui-router/angular-ui-router.min.js"></script>-->
+  <script src="libs/jquery/dist/jquery.js"></script>
+  <script src="libs/semantic/dist/semantic.js"></script>
+  <script src="libs/angular/angular.js"></script>
+  <script src="libs/angular-ui-router/release/angular-ui-router.js"></script>
 
   <script src="assets/js/app.js"></script>
   <script src="assets/js/controllers/home.js"></script>
   <script src="assets/js/controllers/feed.js"></script>
   <script src="assets/js/controllers/friends.js"></script>
+  <script src="assets/js/controllers/friendsadd.js"></script>
   <script src="assets/js/controllers/update.js"></script>
 </head>
 <body>
-
-  <div class="ui stackable container menu">
-    <div class="item">
-      <h2 class="ui header">
-        <i class="icons">
-          <i class="external outline icon"></i>
-        </i>
-        <div class="content">Goldfish</div>
-      </h2>
-    </div>
-    <a class="ui item" href="/">Home</a>
-  </div>
   
-  <div ng-controller="UpdateCtrl">
-    <div class="ui two column grid container">
-    </div>
-  </div>
-
-  <div class="ui two column grid container">
-    <div class="five wide column">
-      <div class="ui segment">
-
-        <div ng-controller="FriendsCtrl">
-          
-          <div class="ui items">
-            <h3 class="ui header">Friends</h3>
-            
-            <div ng-repeat="friend in friends" class="item">
-              <a class="ui avatar image">
-                <img ng-src="{{ friend.avatar }}">
-              </a>
-              <div class="content">
-                <a class="header">{{ friend.name }}</a>
-              </div>
-            </div>
-            
-          </div>
-          
-        </div>
-        
-      </div>
-    </div>
-    <div class="eleven wide column">
-      <div class="ui segment">
-
-        <div ng-controller="FeedCtrl">
-          
-          <div class="ui stackable container">
-          <!------>
-          
-            <div class="ui threaded comments">
-              <div class="comment" ng-repeat="status in statuses">
-                <a class="avatar">
-                  <img ng-src="{{ status.avatar }}">
-                </a>
-                <div class="content">
-                  <a class="author">{{ status.name }}</a>
-                  <div class="metadata">
-                    <span class="date">Today at 5:42PM</span>
-                  </div>
-                  <div class="text">
-                    {{ status.status }}
-                  </div>
-                  <div class="actions">
-                    <a class="reply">Reply</a>
-                  </div>
-                </div>
-              </div>
-            </div>
-            
-            <!---->
-          </div>
-          
-        </div>
-        
-      </div>
-    </div>
-  </div>
+  <div class="ui stackable container menu" ng-include="'assets/partials/menu.html'"></div>
+  
+  <div ui-view></div>
   
 </body>
 </html>

@@ -1,0 +1,5 @@
+goldfish.controller('FriendsAddCtrl', ($scope) => {
+  
+  
+  
+});
