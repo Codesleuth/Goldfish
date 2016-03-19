@@ -1,4 +1,4 @@
-var goldfish = angular.module('goldfish', ['ui.router', 'pusher-angular', 'pouchdb']);
+var goldfish = angular.module('goldfish', ['ui.router', 'pusher-angular', 'pouchdb', 'yaru22.angular-timeago']);
 
 goldfish.run(() => {
   
