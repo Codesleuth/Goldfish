@@ -1,0 +1,3 @@
+goldfish.controller('UpdateCtrl', ($scope) => {
+  
+});
