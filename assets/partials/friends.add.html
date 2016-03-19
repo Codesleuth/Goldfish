@@ -1,11 +1,39 @@
 <div class="ui two column grid container">
-  <div class="ui segment">  
-    hey
-  </div>
+    <div class="ui segment" ng-show="requestMade">
+        <strong>Request sent to {{mobileNumber}}!</strong>
+    </div>
 </div>
 
 <div class="ui two column grid container">
-  <div class="ui segment">  
-    you
-  </div>
+    <div class="ui segment">
+        <form name="requestForm" ng-submit="request()">
+            <h4>Send a friend request</h4>
+            <fieldset class="form-group">
+                <textarea ng-model="mobileNumber" class="form-control" placeholder="07954123123..." title="Mobile number"></textarea>
+            </fieldset>
+            <fieldset class="form-group">
+                <input type="submit" class="btn btn-primary pull-right" value="Submit request" />
+            </fieldset>
+        </form>
+    </div>
+</div>
+
+<div class="ui two column grid container">
+    <div class="ui segment" ng-show="codeRedeemed">
+        <strong>You are now friends with {{friend}}!</strong>
+    </div>
+</div>
+
+<div class="ui two column grid container">
+    <div class="ui segment">
+        <form name="codeForm" ng-submit="redeem()">
+            <h4>Redeem a friend code</h4>
+            <fieldset class="form-group">
+                <textarea ng-model="code" class="form-control" placeholder="12345..." title="Friend code"></textarea>
+            </fieldset>
+            <fieldset class="form-group">
+                <input type="submit" class="btn btn-primary pull-right" value="Submit code" />
+            </fieldset>
+        </form>
+    </div>
 </div>
