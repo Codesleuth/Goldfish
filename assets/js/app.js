@@ -1,4 +1,8 @@
-var goldfish = angular.module('goldfish', ['ui.router']);
+var goldfish = angular.module('goldfish', ['ui.router', 'pusher-angular', 'pouchdb']);
+
+goldfish.run(() => {
+  
+});
 
 goldfish.config(($stateProvider, $locationProvider, $urlRouterProvider) => {
   $locationProvider.html5Mode(false);
