@@ -1,23 +1,30 @@
 goldfish.controller('FeedCtrl', ($scope, $log, $pusherService, pouchDB) => {
   
+  $scope.timeago = (timestamp) => moment(timestamp).fromNow();
+  
   const pusher = $pusherService.client;
   
   function bindFriends(friends) {
     friends.forEach((friend) => {
       $log.info('Subscribing to channel private-' + friend.id);
-      const friendChannel = pusher.subscribe('private-' + friend.id);
       
-      $log.info('Binding event client-update to channel private-' + friend.id);
-      friendChannel.bind('client-update', (status) => {
-        $log.info('Got a status!');
-        $scope.statuses.push[{
-          id: friend.id,
-          date: new Date,
-          name: status.name,
-          status: status.status,
-          avatar: friend.avatar
-        }]
+      const channel = pusher.subscribe('private-' + friend.id);
+      channel.bind('pusher:subscription_succeeded', () => {
+        $log.info('Subscribed to channel private-' + friend.id);
+        
+        channel.bind('client-update', (status) => {
+          $log.info('Got a status!');
+          $scope.statuses.push({
+            id: friend.id,
+            timestamp: moment().valueOf(),
+            name: status.name,
+            status: status.status,
+            avatar: friend.avatar
+          });
+        });
       });
+      
+      
       
     });
   }
@@ -45,6 +52,7 @@ goldfish.controller('FeedCtrl', ($scope, $log, $pusherService, pouchDB) => {
       name: 'Freddy Fredson'
     }];
     db.post('friends', friends);
+    bindFriends(friends);
   });
   
   db.info().then((info) => {
@@ -52,12 +60,12 @@ goldfish.controller('FeedCtrl', ($scope, $log, $pusherService, pouchDB) => {
   });
 
   $scope.statuses = [{
-    date: new Date(2016, 00, 01, 12, 01),
+    timestamp: moment().valueOf() - 120000,
     name: 'Some guy',
     status: 'Hello I am some guy how are you',
     avatar: 'images/matthew.png'
   },{
-    date: new Date(2016, 00, 02, 12, 01),
+    timestamp: moment().valueOf() - 36000,
     name: 'Guy Some',
     status: 'Hello I am guy some how are you',
     avatar: 'images/elliot.jpg'
