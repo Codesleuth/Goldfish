@@ -1,0 +1,15 @@
+{
+  "name": "Goldfish",
+  "version": "1.0.0",
+  "authors": [
+    "David Wood <david.p.wood@gmail.com>",
+    "Moreton Brockley"
+  ],
+  "license": "UNLICENSED",
+  "private": true,
+  "dependencies": {
+    "angular": "~1.4.8",
+    "angular-ui-router": "~0.2.15",
+    "semantic": "~2.1.6"
+  }
+}
