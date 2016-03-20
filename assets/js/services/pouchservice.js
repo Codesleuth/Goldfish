@@ -9,8 +9,8 @@ goldfish.factory('$pouchService', ($rootScope, $log, pouchDB, $q) => {
         db.put(friends).then(() => {
           $log.log("added friend");
           $log.log(friend);
-          $rootScope.$broadcast('new-friend', friend);
         }).catch(reject);    
+        $rootScope.$broadcast('new-friend', friend);
       }).catch((err) => {
         if (err.status === 404) return db.put({
           _id: 'friends',
