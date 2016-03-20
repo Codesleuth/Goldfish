@@ -1,20 +1,32 @@
-goldfish.controller('UpdateCtrl', ($log, $scope, $pusherService) => {
+goldfish.controller('UpdateCtrl', ($log, $scope, $pusherService, $pouchService) => {
+  
   const pusher = $pusherService.client;
-  const channel = pusher.subscribe('private-1');
-  channel.bind('pusher:subscription_succeeded', () => {
-    $log.info('pusher:subscription_succeeded!');
-  });
   
   $scope.status = { status: 'Hello...?' };
   
-  $scope.testUpdate = (status) => {
-    var triggered = channel.trigger('client-update', {
-      name: 'kajshdkjashdjkajdkjasd',
+  var userProfile = null;
+  var profileChannel = null;
+  
+  function sendUpdate(status) {
+    var sent = profileChannel.trigger('client-update', {
+      name: userProfile.name,
       status: status.status,
-      avatar: 'images/kristy.png'
+      avatar: userProfile.avatar || 'images/kristy.png'
     });
+    if (!sent) return $log.error('Could not send client-update');
+    $log.info('Sent client-update');
+  }
+  
+  $scope.testUpdate = (status) => {
+    if (profileChannel) return sendUpdate(status);
     
-    if (!triggered) return $log.error('Could not send client-update');
-    $log.info('triggered!');
+    $pouchService.getProfile().then((profile) => {
+      userProfile = profile;
+      const channelName = `private-${profile.id}`;
+      profileChannel = pusher.subscribe(channelName);
+      profileChannel.bind('pusher:subscription_succeeded', () => {
+        sendUpdate(status);
+      });
+    }).catch($log.error);
   };
 });

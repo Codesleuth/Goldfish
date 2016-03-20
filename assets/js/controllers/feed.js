@@ -12,7 +12,7 @@ goldfish.controller('FeedCtrl', ($rootScope, $scope, $log, $pusherService, $pouc
     channel.bind('pusher:subscription_succeeded', () => {
       $log.info(`Subscribed to channel private-${friendId}`);
       
-      channel.bind('client-update', (status) => {
+      channel.bind('client-update', (status) =>   {
         $log.info(`Got a status from friend ${friendId}!`);
         $scope.statuses.push({
           id: friend.id,
