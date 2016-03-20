@@ -1,12 +1,14 @@
 goldfish.factory('$pouchService', ($rootScope, $log, pouchDB, $q) => {
   const db = new pouchDB('goldfish');
   
-  function addFriend(friend) {
+  function addFriend(id, name) {
     return $q((resolve, reject) => {
+      const friend = { id: id, name: name };
       db.get('friends').then((friends) => {
         friends.profiles.push(friend);
         db.put(friends).then(() => {
           $log.log("added friend");
+          $log.log(friend);
           $rootScope.$broadcast('new-friend', friend);
         }).catch(reject);    
       }).catch((err) => {
