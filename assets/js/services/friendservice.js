@@ -3,15 +3,19 @@ goldfish.factory('$friendService', ($rootScope, $pusherService, $pouchService, $
   
   $rootScope.$on('new-friend', function (friend) {
     $pouchService.getProfile().then((profile) => {
-      pusher.trigger('private-' + friend.id, 'client-friend-accept', profile);
+      const channel = pusher.subscribe('private-' + friend.id);
+      channel.bind('pusher:subscription_succeeded', () => {
+        channel.trigger('client-friend-accept', profile);
+        channel.unbind();
+      });
     });
   });
   
   function addfriend(mobileNumber, code){
-    const tempChannel = pusher.subscribe('private-' + code);
-    tempChannel.bind('client-friend-request', (request) => {
+    const channel = pusher.subscribe('private-' + code);
+    channel.bind('client-friend-request', (request) => {
+      channel.unbind();
       $pouchService.addFriend({id: request.id, name: request.name})
-      tempChannel.unbind();
     });
     
     return $q((resolve, reject) => {
@@ -25,7 +29,27 @@ goldfish.factory('$friendService', ($rootScope, $pusherService, $pouchService, $
     });
   }
   
+  function redeemFriend(code){
+    $q((resolve, reject) => { 
+      $pouchService.getProfile().then((profile) => {
+        const codeChannel = pusher.subscribe('private-code-' + code);
+        codeChannel.bind('pusher:subscription_succeeded', () => {
+          codeChannel.trigger('client-friend-request', profile);
+          codeChannel.unbind();
+        });
+        
+        const channel = pusher.subscribe('private-' + profile.id);
+        channel.bind('client-friend-accept', (request) => {
+          channel.unbind();
+          $pouchService.addFriend({id: request.id, name: request.name})
+          resolve(profile);
+        });
+      });
+    });
+  }
+  
   return {
-      addFriend: addfriend
+      add: addfriend,
+      redeem: redeemFriend
   };
 });
