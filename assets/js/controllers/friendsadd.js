@@ -14,9 +14,9 @@ goldfish.controller('FriendsAddCtrl', ($scope, $friendService) => {
   $scope.code = "";
   
   $scope.redeem = () => {
-    $friendService.redeem($scope.code).then((profile) => {
+    $friendService.redeem($scope.code).then((name) => {
       $scope.codeRedeemed = true;
-      $scope.friend = profile.name;
+      $scope.friend = name;
     });
   };
 });
