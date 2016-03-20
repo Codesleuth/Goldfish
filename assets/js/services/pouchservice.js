@@ -49,6 +49,18 @@ goldfish.factory('$pouchService', ($rootScope, $log, pouchDB, $q) => {
     });
   }
   
+  function getFriend(friendId) {
+    return $q((resolve, reject) => {
+      db.get('friends').then((friends) => {
+        const friend = friends.profiles.find((f) => f.id === friendId);
+        resolve(friend);
+      }).catch((err) => {
+        if (err.status === 404) return resolve([]);
+        reject(err);
+      });
+    });
+  }
+  
   function removeProfile() {
     return $q((resolve, reject) => {
       db.get('profile').then((profile) => {
@@ -83,6 +95,7 @@ goldfish.factory('$pouchService', ($rootScope, $log, pouchDB, $q) => {
     removeProfile: removeProfile,
     addFriend: addFriend,
     getFriends: getFriends,
+    getFriend: getFriend,
     purgeFriends: purgeFriends
   };
 });

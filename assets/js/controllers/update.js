@@ -14,7 +14,7 @@ goldfish.controller('UpdateCtrl', ($log, $scope, $pusherService, $pouchService) 
       avatar: userProfile.avatar || 'images/kristy.png'
     });
     if (!sent) return $log.error('Could not send client-update');
-    $log.info('Sent client-update');
+    $log.info('Sent client-update to ' + profileChannel.name);
   }
   
   $scope.testUpdate = (status) => {

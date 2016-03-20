@@ -14,13 +14,15 @@ goldfish.controller('FeedCtrl', ($rootScope, $scope, $log, $pusherService, $pouc
       
       channel.bind('client-update', (status) =>   {
         $log.info(`Got a status from friend ${friendId}!`);
-        $scope.statuses.push({
-          id: friend.id,
-          timestamp: moment().valueOf(),
-          name: status.name,
-          status: status.status,
-          avatar: friend.avatar
-        });
+        $pouchService.getFriend(friendId).then((friend) => {
+          $scope.statuses.push({
+            id: friend.id,
+            timestamp: moment().valueOf(),
+            name: status.name,
+            status: status.status,
+            avatar: friend.avatar
+          });
+        }).catch($log.error);
       });
     });
   }
