@@ -4,19 +4,19 @@ goldfish.controller('FriendsAddCtrl', ($scope, $friendService) => {
   $scope.friendCode = Math.floor((Math.random() * 10000) + 1);
   
   $scope.request = () => {
-    $friendService.addFriend($scope.mobileNumber, $scope.friendCode).then(() => {
+    $friendService.add($scope.mobileNumber, $scope.friendCode).then(() => {
       $scope.requestMade = true;
     });
   };
   
   $scope.codeRedeemed = false;
   $scope.friend = "";
+  $scope.code = "";
   
   $scope.redeem = () => {
-    //broadcast public channel to code channel
-    //hook up callback to listen on public channel for mirror event
-    //and store them into the database
-    $scope.codeRedeemed = true;
-    $scope.friend = "Dave";
+    $friendService.redeem($scope.code).then((profile) => {
+      $scope.codeRedeemed = true;
+      $scope.friend = profile.name;
+    });
   };
 });

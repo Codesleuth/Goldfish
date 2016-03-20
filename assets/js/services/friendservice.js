@@ -1,17 +1,26 @@
-goldfish.factory('$friendService', ($rootScope, $pusherService, $pouchService, $http, $q) => {
+goldfish.factory('$friendService', ($rootScope, $pusherService, $pouchService, $http, $q, $log) => {
   const pusher = $pusherService.client;
   
   $rootScope.$on('new-friend', function (friend) {
     $pouchService.getProfile().then((profile) => {
-      pusher.trigger('private-' + friend.id, 'client-friend-accept', profile);
+      const channel = pusher.subscribe('private-' + friend.id);
+      channel.bind('pusher:subscription_succeeded', () => {
+        channel.trigger('client-friend-accept', profile);
+        $log.log('sent client-friend-accept to private-' + friend.id);
+        channel.unbind();
+      });
     });
   });
   
   function addfriend(mobileNumber, code){
-    const channel = pusher.subscribe('private-' + code);
+    const channel = pusher.subscribe('private-code-' + code);
+    channel.bind('pusher:subscription_succeeded', () => {
+      $log.log('subscribed to private-code-' + code);
+    });
     channel.bind('client-friend-request', (request) => {
-      $pouchService.addFriend({id: request.id, name: request.name});
+      $log.log("received client-friend-request on private-code-" + code);
       channel.unbind();
+      $pouchService.addFriend({id: request.id, name: request.name})
     });
     
     return $q((resolve, reject) => {
@@ -25,7 +34,32 @@ goldfish.factory('$friendService', ($rootScope, $pusherService, $pouchService, $
     });
   }
   
+  function redeemFriend(code){
+    return $q((resolve, reject) => { 
+      $pouchService.getProfile().then((profile) => {
+        const codeChannel = pusher.subscribe('private-code-' + code);
+        codeChannel.bind('pusher:subscription_succeeded', () => {
+          codeChannel.trigger('client-friend-request', profile);
+          $log.log('sent client-friend- to private-code-' + code);
+          codeChannel.unbind();
+        });
+        
+        const channel = pusher.subscribe('private-' + profile.id);
+        channel.bind('pusher:subscription_succeeded', () => {
+          $log.log('subscribed to private-' + profile.id);
+        });
+        channel.bind('client-friend-accept', (request) => {
+          $log.log('received client-friend-accept on private-' + profile-id);
+          channel.unbind();
+          $pouchService.addFriend({id: request.id, name: request.name})
+          resolve(profile);
+        });
+      });
+    });
+  }
+  
   return {
-    addFriend: addfriend
+      add: addfriend,
+      redeem: redeemFriend
   };
 });
