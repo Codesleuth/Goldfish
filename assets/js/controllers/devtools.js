@@ -1,11 +1,7 @@
 goldfish.controller('DevToolsCtrl', ($scope, $pouchService, $log) => {
   $scope.addRandomFriend = () => {
     const id = Math.floor((Math.random() * 10000) + 1);
-    $pouchService.addFriend({
-      id: id,
-      name: `Friend [${id}]`,
-      avatar: 'images/steve.jpg'
-    });
+    $pouchService.addFriend(id, `Friend [${id}]`, 'images/steve.jpg');
   };
   
   $scope.removeAllFriends = () => {

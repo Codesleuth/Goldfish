@@ -1,9 +1,9 @@
 goldfish.factory('$pouchService', ($rootScope, $log, pouchDB, $q) => {
   const db = new pouchDB('goldfish');
   
-  function addFriend(id, name) {
+  function addFriend(id, name, avatar) {
     return $q((resolve, reject) => {
-      const friend = { id: id, name: name };
+      const friend = { id: id, name: name, avatar: avatar || 'images/matthew.png' };
       db.get('friends').then((friends) => {
         friends.profiles.push(friend);
         db.put(friends).then(() => {
