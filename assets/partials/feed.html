@@ -1,4 +1,9 @@
 <div class="ui threaded comments">
+  <div class="comment" ng-hide="statuses.length">
+    <div class="text">
+      <em>No events yet...</em>
+    </div>
+  </div>
   <div class="comment" ng-repeat="status in statuses | orderBy:'-timestamp'">
     <a class="avatar">
       <img ng-src="{{ status.avatar }}">
