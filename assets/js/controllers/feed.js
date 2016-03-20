@@ -31,44 +31,36 @@ goldfish.controller('FeedCtrl', ($scope, $log, $pusherService, pouchDB) => {
   
   var db = pouchDB('goldfish');
   
-  db.get('profile').catch((err) => {
-    if (err.status !== 404) return $log.error(err);
-    $log.info('Adding dummy profile...');
-    const profile = {
-      id: 1,
-      name: 'Bobly Bobson'
-    };
-    db.post('profile', profile);
-  });
+  db.get('profile')
+    // .catch((err) => {
+    //   if (err.status !== 404) return $log.error(err);
+    //   $log.info('Adding dummy profile...');
+    //   const profile = {
+    //     id: 1,
+    //     name: 'Bobly Bobson'
+    //   };
+    //   db.post('profile', profile);
+    // });
   
-  db.get('friends').then(bindFriends).catch((err) => {
-    if (err.status !== 404) return $log.error(err);
-    $log.info('Adding dummy friends...');
-    const friends = [{
-      id: 1,
-      name: 'Bobly Bobson'
-    },{
-      id: 2,
-      name: 'Freddy Fredson'
-    }];
-    db.post('friends', friends);
-    bindFriends(friends);
-  });
+  db.get('friends').then(bindFriends)
+    // .catch((err) => {
+    //   if (err.status !== 404) return $log.error(err);
+    //   $log.info('Adding dummy friends...');
+    //   const friends = [{
+    //     id: 1,
+    //     name: 'Bobly Bobson'
+    //   },{
+    //     id: 2,
+    //     name: 'Freddy Fredson'
+    //   }];
+    //   db.post('friends', friends);
+    //   bindFriends(friends);
+    // });
   
   db.info().then((info) => {
     $log.info(info);
   });
 
-  $scope.statuses = [{
-    timestamp: moment().valueOf() - 120000,
-    name: 'Some guy',
-    status: 'Hello I am some guy how are you',
-    avatar: 'images/matthew.png'
-  },{
-    timestamp: moment().valueOf() - 36000,
-    name: 'Guy Some',
-    status: 'Hello I am guy some how are you',
-    avatar: 'images/elliot.jpg'
-  }]
+  $scope.statuses = []
   
 });

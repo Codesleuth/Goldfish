@@ -8,10 +8,10 @@ goldfish.factory('$friendService', ($rootScope, $pusherService, $pouchService, $
   });
   
   function addfriend(mobileNumber, code){
-    const tempChannel = pusher.subscribe('private-' + code);
-    tempChannel.bind('client-friend-request', (request) => {
-      $pouchService.addFriend({id: request.id, name: request.name})
-      tempChannel.unbind();
+    const channel = pusher.subscribe('private-' + code);
+    channel.bind('client-friend-request', (request) => {
+      $pouchService.addFriend({id: request.id, name: request.name});
+      channel.unbind();
     });
     
     return $q((resolve, reject) => {
@@ -26,6 +26,6 @@ goldfish.factory('$friendService', ($rootScope, $pusherService, $pouchService, $
   }
   
   return {
-      addFriend: addfriend
+    addFriend: addfriend
   };
 });
