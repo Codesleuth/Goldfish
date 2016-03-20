@@ -59,7 +59,7 @@ goldfish.factory('$friendService', ($rootScope, $pusherService, $pouchService, $
   }
   
   return {
-      add: addfriend,
-      redeem: redeemFriend
+    add: addfriend,
+    redeem: redeemFriend
   };
 });

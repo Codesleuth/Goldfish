@@ -1,13 +1,13 @@
-<div class="comment" ng-hide="friends.length">
+<div class="item" ng-hide="friends.length">
   <div class="text">
     <em>No friends yet...</em>
   </div>
 </div>
-<div ng-repeat="friend in friends" class="item">
-  <a class="ui avatar image">
-    <img ng-src="{{ friend.avatar }}">
-  </a>
-  <div class="content">
-    <a class="header">{{ friend.name }}</a>
+<div ng-repeat="friend in friends | orderBy:'+name'" class="item" ng-show="friends.length">
+  <div class="ui avatar image">
+    <img ng-src="{{ friend.avatar }}" />
+  </div>
+  <div class="middle aligned content">
+    {{ friend.name }}
   </div>
 </div>

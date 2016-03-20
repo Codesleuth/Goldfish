@@ -1,4 +1,5 @@
 goldfish.controller('FeedCtrl', ($scope, $log, $pusherService, $pouchService) => {
+  $scope.statuses = [];
   
   $scope.timeago = (timestamp) => moment(timestamp).fromNow();
   
@@ -25,7 +26,5 @@ goldfish.controller('FeedCtrl', ($scope, $log, $pusherService, $pouchService) =>
       });
     });
   }).catch($log.error);
-
-  $scope.statuses = []
   
 });

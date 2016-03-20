@@ -47,10 +47,40 @@ goldfish.factory('$pouchService', ($rootScope, $log, pouchDB, $q) => {
     });
   }
   
+  function removeProfile() {
+    return $q((resolve, reject) => {
+      db.get('profile').then((profile) => {
+        $log.info('Removing profile');
+        db.remove(profile).then(resolve).catch(reject);
+      }).catch((err) => {
+        if (err.status === 404) return resolve();
+        reject(err);
+      });
+    });
+  }
+  
+  function purgeFriends() {
+    return $q((resolve, reject) => {
+      db.get('friends').then((friends) => {
+        const profiles = friends.profiles;
+        friends.profiles = [];
+        db.put(friends)
+          .then(() => {
+            profiles.forEach((friend) => {
+              $rootScope.$broadcast('remove-friend', friend);
+            });
+          })
+          .catch(reject);
+      }).catch(() => resolve());
+    });
+  }
+  
   return {
-    addFriend: addFriend,
+    setProfile: setProfile,
     getProfile: getProfile,
+    removeProfile: removeProfile,
+    addFriend: addFriend,
     getFriends: getFriends,
-    setProfile: setProfile
+    purgeFriends: purgeFriends
   };
 });
