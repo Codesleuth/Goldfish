@@ -26,13 +26,13 @@ goldfish.factory('$friendService', ($rootScope, $pusherService, $pouchService, $
     });
     
     return $q((resolve, reject) => {
-      //$pouchService.getProfile().then((profile) => {
-      //  $http.post('http://friender.cloudapp.net/friendplox', {
-      //    MobileNumber: mobileNumber,
-      //    Code: code,
-      //    Name: profile.name
-      //  }).then(resolve);
-      //});
+      $pouchService.getProfile().then((profile) => {
+        $http.post('http://friender.cloudapp.net/friendplox', {
+          MobileNumber: mobileNumber,
+          Code: code,
+          Name: profile.name
+        }).then(resolve);
+      });
       resolve();
     });
   }
@@ -62,7 +62,7 @@ goldfish.factory('$friendService', ($rootScope, $pusherService, $pouchService, $
   }
   
   return {
-      add: addfriend,
-      redeem: redeemFriend
+    add: addfriend,
+    redeem: redeemFriend
   };
 });
