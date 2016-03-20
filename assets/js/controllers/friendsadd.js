@@ -1,20 +1,11 @@
-goldfish.controller('FriendsAddCtrl', ($scope, $http) => {
+goldfish.controller('FriendsAddCtrl', ($scope, $friendService) => {
   $scope.requestMade = false;
   $scope.mobileNumber = "";
   $scope.friendCode = Math.floor((Math.random() * 10000) + 1);
   
   $scope.request = () => {
-    //subscribe to pusher channel
-    //hook up callback to send public channel id to received channel id
-    //and also push info into db
-    $http.post('http://friender.cloudapp.net/friendplox', {
-        MobileNumber: $scope.mobileNumber,
-        Code: $scope.friendCode,
-        Name: "Moreton"
-    }).then(() => {
-        $scope.requestMade = true;
-    }, (err) => {
-        
+    $friendService.addFriend($scope.mobileNumber, $scope.friendCode).then(() => {
+      $scope.requestMade = true;
     });
   };
   
