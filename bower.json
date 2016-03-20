@@ -13,6 +13,8 @@
     "semantic": "~2.1.6",
     "pusher-angular": "^0.1.9",
     "pusher": "^3.0.0",
-    "angular-pouchdb": "^4.1.0"
+    "angular-pouchdb": "^4.1.0",
+    "moment": "^2.12.0",
+    "angular-timeago": "^0.2.5"
   }
 }
