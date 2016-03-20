@@ -1,21 +1,55 @@
-goldfish.factory('$pouchService', ($rootScope, $log, pouchDB) => {
-  const db = pouchDB('goldfish');
+goldfish.factory('$pouchService', ($rootScope, $log, pouchDB, $q) => {
+  const db = new pouchDB('goldfish');
   
-  function addfriend(friend){
-    db.get('friends').then((friends) => {
-      friends.push(friend);
-      db.post('friends', friends).then(() => {
+  function addFriend(friend) {
+    return $q((resolve, reject) => {
+      db.get('friends').then((friends) => {
+        friends.profiles.push(friend);
+        db.put(friends).then(() => {
           $rootScope.$broadcast('new-friend', friend);
-      });    
+        }).catch(reject);    
+      }).catch((err) => {
+        if (err.status === 404) return db.put({
+          _id: 'friends',
+          profiles: [friend]
+        }).then(resolve).catch(reject);
+        reject(err);
+      });
     });
   }
   
-  function getprofile(){
-    return db.get('profile').catch($log.error);
+  function getProfile() {
+    return $q((resolve, reject) => {
+      db.get('profile').then(resolve).catch((err) => {
+        if (err.status === 404) return resolve(null);
+        reject(err);
+      });
+    });
+  }
+  
+  function setProfile(id, name) {
+    return $q((resolve, reject) => {
+      const profile = { _id: 'profile', id: id, name: name };
+      $log.info(profile);
+      db.put(profile).then(resolve).catch(reject);
+    });
+  }
+  
+  function getFriends() {
+    return $q((resolve, reject) => {
+      db.get('friends').then((friends) => {
+        resolve(friends.profiles);
+      }).catch((err) => {
+        if (err.status === 404) return resolve([]);
+        reject(err);
+      });
+    });
   }
   
   return {
-    addFriend: addfriend,
-    getProfile: getprofile
+    addFriend: addFriend,
+    getProfile: getProfile,
+    getFriends: getFriends,
+    setProfile: setProfile
   };
 });

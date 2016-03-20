@@ -1,22 +1,38 @@
-<div class="ui stackable container">
-  <h3 class="ui header">Friends</h3>
+<div ng-show="!hasProfile" class="ui stackable container">
   <div class="ui segment">
+    <h3 class="ui header">Create a Profile</h3>
+    <form class="ui form" ng-submit="createProfile(newProfile)">
+      <div class="fields">
+        <div class="field">
+          <label>Name</label>
+          <input type="text" placeholder="Name" ng-model="newProfile.name" />
+        </div>
+      </div>
+      <input type="submit" class="ui submit button" value="Create!" />
+    </form>
+  </div>
+</div>
+
+<div ng-show="hasProfile" class="ui stackable container">
+  <div class="ui segment">
+    <h3 class="ui header">Update</h3>
     <div ng-controller="UpdateCtrl" ng-include="'assets/partials/update.html'"></div>
   </div>
 </div>
 
-<div class="ui two column grid container">
-  <div class="five wide column">
-    <div class="ui segment">  
-      <div class="ui items">
-        <h3 class="ui header">Friends</h3>
-        <div ng-controller="FriendsCtrl" ng-include="'assets/partials/friends.html'"></div>
+<div ng-show="hasProfile" class="ui stackable container">
+  <div class="ui segment">
+    <div class="ui two column grid">
+      <div class="five wide column">
+        <div class="ui items">
+          <h3 class="ui header">Friends</h3>
+          <div ng-controller="FriendsCtrl" ng-include="'assets/partials/friends.html'"></div>
+        </div>
       </div>
-    </div>
-  </div>
-  <div class="eleven wide column">
-    <div class="ui segment">
-      <div ng-controller="FeedCtrl" ng-include="'assets/partials/feed.html'"></div>
+      <div class="eleven wide column">
+        <h3 class="ui header">Status Updates</h3>
+        <div ng-controller="FeedCtrl" ng-include="'assets/partials/feed.html'"></div>
+      </div>
     </div>
   </div>
 </div>

@@ -1,3 +1,8 @@
+<div class="comment" ng-hide="friends.length">
+  <div class="text">
+    <em>No friends yet...</em>
+  </div>
+</div>
 <div ng-repeat="friend in friends" class="item">
   <a class="ui avatar image">
     <img ng-src="{{ friend.avatar }}">
